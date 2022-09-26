@@ -1,31 +1,72 @@
-import { asset } from "$fresh/runtime.ts";
-import Counter from "../islands/Counter.tsx";
-import Countdown from "../islands/Countdown.tsx";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { IProduct } from "../utils/types.ts";
+import ProductCard from "../components/Product.tsx";
 
-export default function Home() {
-  const date = new Date();
-  date.setHours(date.getHours() + 1);
+export const handler: Handlers<{
+  products: IProduct[];
+  query: string;
+}> = {
+  async GET(req, ctx) {
+    const url = new URL(req.url);
+    const query = url.searchParams.get("q") || "";
+    const page = url.searchParams.get("page") || "1";
+    const limit = "15";
+    const filter = query.length
+      ? `&filter[name][_contains]=${encodeURIComponent(query)}`
+      : "";
+
+    const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+
+    let products: IProduct[] = [];
+
+    const reqUrl =
+      `${url.origin}/api/products?page=${page}&offset=${offset}&limit=${limit}&filter=${filter}`;
+
+    products = await fetch(reqUrl).then((res) => res.json());
+
+    if (!products) {
+      return new Response("Product search failed", { status: 404 });
+    }
+
+    return ctx.render({
+      products,
+      query,
+    });
+  },
+};
+export default function Home(
+  { data }: PageProps<{
+    products: IProduct[];
+    query: string;
+  }>,
+) {
+  const { products, query } = data;
 
   return (
-    <div class="p-4 mx-auto max-w-screen-md">
-      <img
-        src="/logo.svg"
-        class="w-32 h-32"
-        alt="the fresh logo: a sliced lemon dripping with juice"
-      />
-      <p class="my-6">
-        Welcome to `fresh`. Try updating this message in the ./routes/index.tsx
-        file, and refresh.
-      </p>
-      <Counter start={3} />
-      <p>
-        The big event is happening <Countdown target={date.toISOString()} />.
-      </p>
+    <div class="mx-auto max-w-screen-xl">
+      {
+        /* <form class="flex w-full gap-2">
+        <input
+          type="text"
+          name="q"
+          value={query}
+          class="flex-grow w-full shadow-sm focus:ring-indigo-800 focus:border-indigo-800 block sm:text-lg border-1 rounded-md p-3"
+        />
 
-      <div>
-        <img src="/pro.png" loading="lazy" />
-        <img src="/basic.png" data-fresh-disable-lock loading="lazy" />
-        <img src={asset("/tiger.jpg")} loading="lazy" />
+        <button
+          type="submit"
+          class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 px-10"
+        >
+          Search
+        </button>
+      </form> */
+      }
+
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 mt-5 gap-2">
+        {products.map((product) => (
+          // <div key={product.id}>{products?.name}</div>
+          <ProductCard key={product.id} product={product} />
+        ))}
       </div>
     </div>
   );
