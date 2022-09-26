@@ -1,3 +1,4 @@
+import { asset } from "$fresh/runtime.ts";
 import Counter from "../islands/Counter.tsx";
 import Countdown from "../islands/Countdown.tsx";
 
@@ -20,6 +21,12 @@ export default function Home() {
       <p>
         The big event is happening <Countdown target={date.toISOString()} />.
       </p>
+
+      <div>
+        <img src="/pro.png" loading="lazy" />
+        <img src="/basic.png" data-fresh-disable-lock loading="lazy" />
+        <img src={asset("/tiger.jpg")} loading="lazy" />
+      </div>
     </div>
   );
 }
