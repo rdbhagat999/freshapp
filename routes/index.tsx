@@ -10,14 +10,15 @@ export const handler: Handlers<{
     const url = new URL(req.url);
     const query = url.searchParams.get("q") || "";
     const page = url.searchParams.get("page") || "1";
-    const limit = "15";
+    const limit = url.searchParams.get("limit") || "15";
     const filter = query.length
       ? `&filter[name][_contains]=${encodeURIComponent(query)}`
       : "";
 
-    const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+    const offset = `${(parseInt(page, 10) - 1) * parseInt(limit, 10)}`;
 
     let products: IProduct[] = [];
+    ``;
 
     const reqUrl =
       `${url.origin}/api/products?page=${page}&offset=${offset}&limit=${limit}&filter=${filter}`;
@@ -64,7 +65,6 @@ export default function Home(
 
       <div class="grid sm:grid-cols-2 md:grid-cols-3 mt-5 gap-2">
         {products.map((product) => (
-          // <div key={product.id}>{products?.name}</div>
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

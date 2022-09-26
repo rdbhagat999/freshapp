@@ -8,10 +8,6 @@ export const handler: Handlers<IProduct | null> = {
 
     const { id } = ctx.params;
 
-    if (!id) {
-      return ctx.render(null);
-    }
-
     const reqUrl = `${url.origin}/api/products/${id}`;
 
     const product: IProduct = await fetch(reqUrl).then((res) => res.json());
@@ -39,7 +35,7 @@ export default function GithubPage({ data }: PageProps<IProduct | null>) {
         <div>
           <div class="text-5xl font-bold mt-3">{data?.name}</div>
           <div class="text-3xl font-italic mt-5">
-            {data.description}
+            {data?.description}
           </div>
 
           <div class="grid grid-cols-2 mt-5 text-3xl">
