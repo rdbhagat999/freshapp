@@ -2,13 +2,19 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 
 import { IProduct } from "../../utils/types.ts";
 
+import { APP_ROOT } from "../../utils/env.ts";
+
 export const handler: Handlers<IProduct | null> = {
   async GET(req, ctx) {
     const url = new URL(req.url);
 
     const { id } = ctx.params;
 
-    const reqUrl = `${url.origin}/api/products/${id}`;
+    const isLocalhost = url.origin.includes("localhost");
+
+    const appOrigin = isLocalhost ? url.origin : APP_ROOT;
+
+    const reqUrl = `${appOrigin}/api/products/${id}`;
 
     const product: IProduct = await fetch(reqUrl).then((res) => res.json());
 

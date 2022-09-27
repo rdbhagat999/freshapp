@@ -1,7 +1,7 @@
 import { Handlers } from "$fresh/server.ts";
 
 import { IProduct } from "../../../utils/types.ts";
-import { DB, TOKEN } from "../../../utils/env.ts";
+import { API_ROOT, DB, TOKEN } from "../../../utils/env.ts";
 
 const api_root = `https://${DB}.directus.app/items`;
 
@@ -16,7 +16,7 @@ export const handler: Handlers = {
     const filter = url.searchParams.get("filter") || "";
 
     const api_url =
-      `${api_root}/${items}?access_token=${TOKEN}&q=${query}&offset=${offset}&limit=${limit}&filter=${filter}`;
+      `${API_ROOT}/items/${items}?access_token=${TOKEN}&q=${query}&offset=${offset}&limit=${limit}&filter=${filter}`;
 
     const headers = {
       "Content-Type": "application/json",

@@ -2,8 +2,10 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { IProduct } from "../utils/types.ts";
 import ProductCard from "../components/Product.tsx";
 
+import { APP_ROOT } from "../utils/env.ts";
+
 export const handler: Handlers<{
-  products: IProduct[];
+  products: IProduct[] | null;
   query: string;
 }> = {
   async GET(req, ctx) {
@@ -17,8 +19,12 @@ export const handler: Handlers<{
 
     const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
 
+    const isLocalhost = url.origin.includes("localhost");
+
+    const appOrigin = isLocalhost ? url.origin : APP_ROOT;
+
     const reqUrl =
-      `${url.origin}/api/products?page=${page}&offset=${offset}&limit=${limit}&filter=${filter}`;
+      `${appOrigin}/api/products?page=${page}&offset=${offset}&limit=${limit}&filter=${filter}`;
 
     const resp = await fetch(reqUrl);
 
