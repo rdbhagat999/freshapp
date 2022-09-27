@@ -1,9 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { IProduct } from "../../utils/types.ts";
 import { API_ROOT, DB, TOKEN } from "../../utils/env.ts";
-
-import Header from "../../components/Header.tsx";
-import Footer from "../../components/Footer.tsx";
+import { IProduct } from "../../utils/types.ts";
 
 export const handler: Handlers<IProduct | null> = {
   async GET(_req, ctx) {
@@ -39,38 +36,34 @@ export default function GithubPage({ data }: PageProps<IProduct | null>) {
   }
 
   return (
-    <div class="mx-auto max-w-screen-xl">
-      <Header />
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-5">
-        <img
-          src={`${data?.thumbnail}`}
-          alt={data?.name}
-          class="w-full"
-        />
-        <div>
-          <div class="text-5xl font-bold mt-3">{data?.name}</div>
-          <div class="text-3xl font-italic mt-5">
-            {data?.description}
-          </div>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-5">
+      <img
+        src={`${data?.thumbnail}`}
+        alt={data?.name}
+        class="w-full"
+      />
+      <div>
+        <div class="text-5xl font-bold mt-3">{data?.name}</div>
+        <div class="text-3xl font-italic mt-5">
+          {data?.description}
+        </div>
 
-          <div class="grid grid-cols-2 mt-5 text-3xl">
-            {[
-              "price",
-              "quantity",
-              "sku",
-              "status",
-              "type",
-              "vendor",
-            ].map((stat) => (
-              <div key={stat} class="mt-3">
-                <div class="font-bold">{stat}</div>
-                <div>{data[stat as keyof IProduct]}</div>
-              </div>
-            ))}
-          </div>
+        <div class="grid grid-cols-2 mt-5 text-3xl">
+          {[
+            "price",
+            "quantity",
+            "sku",
+            "status",
+            "type",
+            "vendor",
+          ].map((stat) => (
+            <div key={stat} class="mt-3">
+              <div class="font-bold">{stat}</div>
+              <div>{data[stat as keyof IProduct]}</div>
+            </div>
+          ))}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

@@ -1,10 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { IProduct } from "../utils/types.ts";
-import Header from "../components/Header.tsx";
-import ProductCard from "../components/Product.tsx";
-import Footer from "../components/Footer.tsx";
-
 import { API_ROOT, DB, TOKEN } from "../utils/env.ts";
+import ProductCard from "../components/Product.tsx";
 
 export const handler: Handlers<{
   products: IProduct[] | null;
@@ -63,9 +60,7 @@ export default function Home(
   const { products, query } = data;
 
   return (
-    <div class="mx-auto max-w-screen-xl">
-      <Header />
-
+    <>
       <form class="flex w-full gap-2">
         <input
           type="text"
@@ -74,7 +69,6 @@ export default function Home(
           placeholder="search by product name"
           class="flex-grow w-full shadow-sm focus:ring-indigo-800 focus:border-indigo-800 block sm:text-lg border-1 rounded-md p-3"
         />
-
         <button
           type="submit"
           class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 px-10"
@@ -89,8 +83,6 @@ export default function Home(
             <ProductCard key={product.id} product={product} />
           ))}
       </div>
-
-      <Footer />
-    </div>
+    </>
   );
 }
