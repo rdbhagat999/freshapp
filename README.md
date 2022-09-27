@@ -5,7 +5,7 @@
 Start the project:
 
 ```
-deno task start
+DB=*** TOKEN=*** deno task start
 ```
 
 This will watch the project directory and restart as necessary.

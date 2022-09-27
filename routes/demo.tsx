@@ -1,6 +1,7 @@
 import { asset } from "$fresh/runtime.ts";
 import Counter from "../islands/Counter.tsx";
 import Countdown from "../islands/Countdown.tsx";
+import Footer from "../components/Footer.tsx";
 
 export default function Home() {
   const date = new Date();
@@ -27,6 +28,7 @@ export default function Home() {
         <img src="/basic.png" data-fresh-disable-lock loading="lazy" />
         <img src={asset("/tiger.jpg")} loading="lazy" />
       </div>
+      <Footer />
     </div>
   );
 }

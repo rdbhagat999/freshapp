@@ -3,6 +3,7 @@ import { IProduct } from "../../utils/types.ts";
 import { API_ROOT, DB, TOKEN } from "../../utils/env.ts";
 
 import Header from "../../components/Header.tsx";
+import Footer from "../../components/Footer.tsx";
 
 export const handler: Handlers<IProduct | null> = {
   async GET(_req, ctx) {
@@ -11,11 +12,11 @@ export const handler: Handlers<IProduct | null> = {
     const reqUrl = `${API_ROOT}/items/products/${id}?access_token=${TOKEN}`;
 
     const resp: Response = await fetch(`${reqUrl}`);
-    console.log(resp.ok);
 
     const resBody = await resp.json();
 
     if (!resp.ok) {
+      console.log(resp.ok);
       console.log(resBody);
       // return ctx.render(null);
       /* displays _404 not found page */
@@ -69,6 +70,7 @@ export default function GithubPage({ data }: PageProps<IProduct | null>) {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
