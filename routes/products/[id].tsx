@@ -17,8 +17,9 @@ export const handler: Handlers<IProduct | null> = {
 
     if (!resp.ok) {
       console.log(resBody);
-
-      return ctx.render(null);
+      // return ctx.render(null);
+      /* displays _404 not found page */
+      return ctx.renderNotFound();
     }
 
     const product: IProduct = resBody?.data && {
