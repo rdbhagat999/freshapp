@@ -16,29 +16,31 @@ export const handler: Handlers = {
       "X-Custom-Header": "Ramandeep Bhagat",
     };
 
-    const initialData = null;
+    const resp: Response = await fetch(`${api_url}`);
+    console.log(resp.ok);
 
-    let jsonResp = JSON.stringify(initialData);
+    const resBody = await resp.json();
+    console.log(resBody);
 
-    const resp = await fetch(`${api_url}`);
+    if (!resp.ok) {
+      const jsonResp = JSON.stringify({
+        message: resBody["errors"][0]["message"],
+      });
 
-    if (resp.status == 404) {
       return new Response(jsonResp, {
         headers,
-        status: 404,
-        statusText: "Not Found",
+        status: resp.status,
+        statusText: resp.statusText,
       });
     }
 
-    const resBody = await resp.json();
-
-    const product = {
+    const product: IProduct = resBody?.data && {
       ...resBody.data,
       thumbnail:
         `https://${DB}.directus.app/assets/${resBody.data.thumbnail}?access_token=${TOKEN}`,
     };
 
-    jsonResp = JSON.stringify(product);
+    const jsonResp = JSON.stringify(product);
 
     return new Response(jsonResp, {
       headers,
