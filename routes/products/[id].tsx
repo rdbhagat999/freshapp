@@ -42,6 +42,7 @@ export default function GithubPage({ data }: PageProps<IProduct | null>) {
       <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-5">
         <img
           src={`${data?.thumbnail}`}
+          alt={data?.name}
           class="w-full"
         />
         <div>
