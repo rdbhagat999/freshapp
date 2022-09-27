@@ -1,17 +1,15 @@
 import { Handlers } from "$fresh/server.ts";
 
 import { IProduct } from "../../../utils/types.ts";
-import { DB, TOKEN } from "../../../utils/env.ts";
+import { API_ROOT, DB, TOKEN } from "../../../utils/env.ts";
 
-const api_root = `https://${DB}.directus.app/items`;
-
-export const handler: Handlers<IProduct[] | null> = {
-  async GET(_req, ctx) {
+export const handler: Handlers = {
+  async GET(_req, ctx): Promise<Response> {
     const items = `products`;
 
     const { id } = ctx.params;
 
-    const api_url = `${api_root}/${items}/${id}?access_token=${TOKEN}`;
+    const api_url = `${API_ROOT}/items/${items}/${id}?access_token=${TOKEN}`;
 
     const headers = {
       "Content-Type": "application/json",

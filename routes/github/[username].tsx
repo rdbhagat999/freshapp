@@ -14,9 +14,6 @@ export const handler: Handlers<User | null> = {
     if (resp.status === 404) {
       return ctx.render(null);
 
-      /* retuns response object without rendering page */
-      // return new Response("User not found", { status: 404 });
-
       /* displays _404 not found page */
       // return ctx.renderNotFound();
     }

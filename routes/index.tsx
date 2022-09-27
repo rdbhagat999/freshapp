@@ -2,28 +2,43 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { IProduct } from "../utils/types.ts";
 import ProductCard from "../components/Product.tsx";
 
+import { APP_ROOT } from "../utils/env.ts";
+
 export const handler: Handlers<{
-  products: IProduct[];
+  products: IProduct[] | null;
   query: string;
 }> = {
   async GET(req, ctx) {
     const url = new URL(req.url);
     const query = url.searchParams.get("q") || "";
     const page = url.searchParams.get("page") || "1";
-    const limit = url.searchParams.get("limit") || "15";
+    const limit = "15";
     const filter = query.length
       ? `&filter[name][_contains]=${encodeURIComponent(query)}`
       : "";
 
-    const offset = `${(parseInt(page, 10) - 1) * parseInt(limit, 10)}`;
+    const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
 
-    let products: IProduct[] = [];
-    ``;
+    const isLocalhost = url.origin.includes("localhost");
+
+    const appOrigin = isLocalhost ? url.origin : APP_ROOT;
 
     const reqUrl =
-      `${url.origin}/api/products?page=${page}&offset=${offset}&limit=${limit}&filter=${filter}`;
+      `${appOrigin}/api/products?page=${page}&offset=${offset}&limit=${limit}&filter=${filter}`;
 
-    products = await fetch(reqUrl).then((res) => res.json());
+    const resp = await fetch(reqUrl);
+
+    if (resp.status === 404) {
+      return ctx.render({
+        products: null,
+        query,
+      });
+
+      /* displays _404 not found page */
+      // return ctx.renderNotFound();
+    }
+
+    const products: IProduct[] = await resp.json();
 
     if (!products) {
       return new Response("Product search failed", { status: 404 });
@@ -64,7 +79,8 @@ export default function Home(
       }
 
       <div class="grid sm:grid-cols-2 md:grid-cols-3 mt-5 gap-2">
-        {products.map((product) => (
+        {products && products.map((product) => (
+          // <div key={product.id}>{products?.name}</div>
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
