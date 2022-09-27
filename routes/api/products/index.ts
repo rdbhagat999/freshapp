@@ -27,23 +27,30 @@ export const handler: Handlers = {
 
     let jsonResp = JSON.stringify(initialData);
 
-    const resp = await fetch(`${api_url}`);
+    const resp: Response = await fetch(`${api_url}`);
+    console.log(resp.ok);
 
-    if (resp.status == 404) {
+    const resBody = await resp.json();
+    console.log(resBody);
+
+    if (!resp.ok) {
+      const jsonResp = JSON.stringify({
+        message: resBody["errors"][0]["message"],
+      });
+
       return new Response(jsonResp, {
         headers,
-        status: 404,
-        statusText: "Not Found",
+        status: resp.status,
+        statusText: resp.statusText,
       });
     }
 
-    const resBody = await resp.json();
-
-    const products: IProduct[] = resBody.data.map((p: IProduct) => ({
-      ...p,
-      thumbnail:
-        `https://${DB}.directus.app/assets/${p.thumbnail}?access_token=${TOKEN}`,
-    }));
+    const products: IProduct[] = resBody?.data &&
+        resBody.data.map((p: IProduct) => ({
+          ...p,
+          thumbnail:
+            `https://${DB}.directus.app/assets/${p.thumbnail}?access_token=${TOKEN}`,
+        })) || [];
 
     jsonResp = JSON.stringify(products);
 
