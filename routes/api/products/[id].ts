@@ -5,8 +5,8 @@ import { DB, TOKEN } from "../../../utils/env.ts";
 
 const api_root = `https://${DB}.directus.app/items`;
 
-export const handler: Handlers<IProduct[] | null> = {
-  async GET(_req, ctx) {
+export const handler: Handlers = {
+  async GET(_req, ctx): Promise<Response> {
     const items = `products`;
 
     const { id } = ctx.params;

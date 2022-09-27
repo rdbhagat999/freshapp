@@ -5,8 +5,8 @@ import { DB, TOKEN } from "../../../utils/env.ts";
 
 const api_root = `https://${DB}.directus.app/items`;
 
-export const handler: Handlers<IProduct[] | null> = {
-  async GET(req, _ctx) {
+export const handler: Handlers = {
+  async GET(req, _ctx): Promise<Response> {
     const items = `products`;
 
     const url = new URL(req.url);
@@ -39,7 +39,7 @@ export const handler: Handlers<IProduct[] | null> = {
 
     const resBody = await resp.json();
 
-    const products = resBody.data.map((p: IProduct) => ({
+    const products: IProduct[] = resBody.data.map((p: IProduct) => ({
       ...p,
       thumbnail:
         `https://${DB}.directus.app/assets/${p.thumbnail}?access_token=${TOKEN}`,

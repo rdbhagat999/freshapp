@@ -3,45 +3,29 @@
 // This file is automatically updated during development when running `dev.ts`.
 
 import config from "./deno.json" assert { type: "json" };
-import * as $0 from "./routes/[name].tsx";
-import * as $1 from "./routes/_404.tsx";
-import * as $2 from "./routes/_500.tsx";
-import * as $3 from "./routes/_middleware.ts";
-import * as $4 from "./routes/about.tsx";
-import * as $5 from "./routes/api/joke.ts";
-import * as $6 from "./routes/api/products/[id].ts";
-import * as $7 from "./routes/api/products/index.ts";
-import * as $8 from "./routes/api/random-uuid.ts";
-import * as $9 from "./routes/demo.tsx";
-import * as $10 from "./routes/github/[username].tsx";
-import * as $11 from "./routes/index.tsx";
-import * as $12 from "./routes/mySpecialDataHandler.ts";
-import * as $13 from "./routes/products/[id].tsx";
-import * as $14 from "./routes/search.tsx";
-import * as $15 from "./routes/users/[id].tsx";
-import * as $16 from "./routes/users/index.tsx";
+import * as $0 from "./routes/_404.tsx";
+import * as $1 from "./routes/_500.tsx";
+import * as $2 from "./routes/about.tsx";
+import * as $3 from "./routes/api/products/[id].ts";
+import * as $4 from "./routes/api/products/index.ts";
+import * as $5 from "./routes/demo.tsx";
+import * as $6 from "./routes/github/[username].tsx";
+import * as $7 from "./routes/index.tsx";
+import * as $8 from "./routes/products/[id].tsx";
 import * as $$0 from "./islands/Countdown.tsx";
 import * as $$1 from "./islands/Counter.tsx";
 
 const manifest = {
   routes: {
-    "./routes/[name].tsx": $0,
-    "./routes/_404.tsx": $1,
-    "./routes/_500.tsx": $2,
-    "./routes/_middleware.ts": $3,
-    "./routes/about.tsx": $4,
-    "./routes/api/joke.ts": $5,
-    "./routes/api/products/[id].ts": $6,
-    "./routes/api/products/index.ts": $7,
-    "./routes/api/random-uuid.ts": $8,
-    "./routes/demo.tsx": $9,
-    "./routes/github/[username].tsx": $10,
-    "./routes/index.tsx": $11,
-    "./routes/mySpecialDataHandler.ts": $12,
-    "./routes/products/[id].tsx": $13,
-    "./routes/search.tsx": $14,
-    "./routes/users/[id].tsx": $15,
-    "./routes/users/index.tsx": $16,
+    "./routes/_404.tsx": $0,
+    "./routes/_500.tsx": $1,
+    "./routes/about.tsx": $2,
+    "./routes/api/products/[id].ts": $3,
+    "./routes/api/products/index.ts": $4,
+    "./routes/demo.tsx": $5,
+    "./routes/github/[username].tsx": $6,
+    "./routes/index.tsx": $7,
+    "./routes/products/[id].tsx": $8,
   },
   islands: {
     "./islands/Countdown.tsx": $$0,
