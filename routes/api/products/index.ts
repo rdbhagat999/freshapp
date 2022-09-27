@@ -3,12 +3,8 @@ import { Handlers } from "$fresh/server.ts";
 import { IProduct } from "../../../utils/types.ts";
 import { API_ROOT, DB, TOKEN } from "../../../utils/env.ts";
 
-const api_root = `https://${DB}.directus.app/items`;
-
 export const handler: Handlers = {
   async GET(req, _ctx): Promise<Response> {
-    const items = `products`;
-
     const url = new URL(req.url);
     const query = url.searchParams.get("q") || "";
     const limit = url.searchParams.get("limit") || "15";
@@ -16,7 +12,7 @@ export const handler: Handlers = {
     const filter = url.searchParams.get("filter") || "";
 
     const api_url =
-      `${API_ROOT}/items/${items}?access_token=${TOKEN}&q=${query}&offset=${offset}&limit=${limit}&filter=${filter}`;
+      `${API_ROOT}/items/products?access_token=${TOKEN}&q=${query}&offset=${offset}&limit=${limit}&filter=${filter}`;
 
     const headers = {
       "Content-Type": "application/json",
@@ -31,9 +27,10 @@ export const handler: Handlers = {
     console.log(resp.ok);
 
     const resBody = await resp.json();
-    console.log(resBody);
 
     if (!resp.ok) {
+      console.log(resBody);
+
       const jsonResp = JSON.stringify({
         message: resBody["errors"][0]["message"],
       });

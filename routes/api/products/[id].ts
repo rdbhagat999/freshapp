@@ -20,9 +20,10 @@ export const handler: Handlers = {
     console.log(resp.ok);
 
     const resBody = await resp.json();
-    console.log(resBody);
 
     if (!resp.ok) {
+      console.log(resBody);
+
       const jsonResp = JSON.stringify({
         message: resBody["errors"][0]["message"],
       });

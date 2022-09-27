@@ -1,26 +1,31 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-
 import { IProduct } from "../../utils/types.ts";
+import { API_ROOT, DB, TOKEN } from "../../utils/env.ts";
 
-import { APP_ROOT } from "../../utils/env.ts";
+import Header from "../../components/Header.tsx";
 
 export const handler: Handlers<IProduct | null> = {
-  async GET(req, ctx) {
-    const url = new URL(req.url);
-
+  async GET(_req, ctx) {
     const { id } = ctx.params;
 
-    const isLocalhost = url.origin.includes("localhost");
+    const reqUrl = `${API_ROOT}/items/products/${id}?access_token=${TOKEN}`;
 
-    const appOrigin = isLocalhost ? url.origin : APP_ROOT;
+    const resp: Response = await fetch(`${reqUrl}`);
+    console.log(resp.ok);
 
-    const reqUrl = `${appOrigin}/api/products/${id}`;
+    const resBody = await resp.json();
 
-    const product: IProduct = await fetch(reqUrl).then((res) => res.json());
+    if (!resp.ok) {
+      console.log(resBody);
 
-    if (!product) {
-      return new Response("Product not found", { status: 404 });
+      return ctx.render(null);
     }
+
+    const product: IProduct = resBody?.data && {
+      ...resBody.data,
+      thumbnail:
+        `https://${DB}.directus.app/assets/${resBody.data.thumbnail}?access_token=${TOKEN}`,
+    };
 
     return ctx.render(product);
   },
@@ -33,6 +38,7 @@ export default function GithubPage({ data }: PageProps<IProduct | null>) {
 
   return (
     <div class="mx-auto max-w-screen-xl">
+      <Header />
       <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-5">
         <img
           src={`${data?.thumbnail}`}

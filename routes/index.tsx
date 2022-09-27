@@ -1,8 +1,9 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { IProduct } from "../utils/types.ts";
+import Header from "../components/Header.tsx";
 import ProductCard from "../components/Product.tsx";
 
-import { APP_ROOT } from "../utils/env.ts";
+import { API_ROOT, DB, TOKEN } from "../utils/env.ts";
 
 export const handler: Handlers<{
   products: IProduct[] | null;
@@ -19,16 +20,17 @@ export const handler: Handlers<{
 
     const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
 
-    const isLocalhost = url.origin.includes("localhost");
-
-    const appOrigin = isLocalhost ? url.origin : APP_ROOT;
-
     const reqUrl =
-      `${appOrigin}/api/products?page=${page}&offset=${offset}&limit=${limit}&filter=${filter}`;
+      `${API_ROOT}/items/products?access_token=${TOKEN}&page=${page}&offset=${offset}&limit=${limit}&filter=${filter}`;
 
-    const resp = await fetch(reqUrl);
+    const resp: Response = await fetch(`${reqUrl}`);
+    console.log(resp.ok);
 
-    if (resp.status === 404) {
+    const resBody = await resp.json();
+
+    if (!resp.ok) {
+      console.log(resBody);
+
       return ctx.render({
         products: null,
         query,
@@ -38,11 +40,12 @@ export const handler: Handlers<{
       // return ctx.renderNotFound();
     }
 
-    const products: IProduct[] = await resp.json();
-
-    if (!products) {
-      return new Response("Product search failed", { status: 404 });
-    }
+    const products: IProduct[] = resBody?.data &&
+        resBody.data.map((p: IProduct) => ({
+          ...p,
+          thumbnail:
+            `https://${DB}.directus.app/assets/${p.thumbnail}?access_token=${TOKEN}`,
+        })) || [];
 
     return ctx.render({
       products,
@@ -60,6 +63,7 @@ export default function Home(
 
   return (
     <div class="mx-auto max-w-screen-xl">
+      <Header />
       {
         /* <form class="flex w-full gap-2">
         <input
@@ -79,10 +83,10 @@ export default function Home(
       }
 
       <div class="grid sm:grid-cols-2 md:grid-cols-3 mt-5 gap-2">
-        {products && products.map((product) => (
-          // <div key={product.id}>{products?.name}</div>
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {products &&
+          products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
       </div>
     </div>
   );
