@@ -2,6 +2,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { IProduct } from "../utils/types.ts";
 import { API_ROOT, DB, TOKEN } from "../utils/env.ts";
 import HeadElement from "../components/HeadElement.tsx";
+import SearchForm from "../components/SearchForm.tsx";
 import ProductCard from "../components/Product.tsx";
 import site from "../utils/site.ts";
 
@@ -62,37 +63,23 @@ export default function Home(
   const { products, query } = data;
 
   return (
-    <>
+    <section>
       <HeadElement
         url={url}
         title={site.title}
         description={site.description}
         image={site.ogImage}
       />
-      <form class="flex w-full gap-2">
-        <input
-          type="text"
-          name="q"
-          value={query}
-          placeholder="search by product name"
-          class="flex-grow w-full shadow-sm focus:ring-indigo-800 focus:border-indigo-800 block sm:text-lg border-1 rounded-md p-3"
-        />
-        <button
-          type="submit"
-          class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 px-10"
-        >
-          Search
-        </button>
-      </form>
+      <SearchForm query={query} />
 
-      <div class="grid sm:grid-cols-2 md:grid-cols-3 mt-5 gap-2">
+      <ul class="grid sm:grid-cols-2 md:grid-cols-3 mt-5 gap-2">
         {products &&
           products.map((product) => (
-            <div key={product.id}>
+            <li key={product.id}>
               <ProductCard product={product} showImg={false} />
-            </div>
+            </li>
           ))}
-      </div>
-    </>
+      </ul>
+    </section>
   );
 }

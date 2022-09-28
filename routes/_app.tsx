@@ -11,7 +11,9 @@ export default function App({ Component }: AppProps) {
       </Head>
       <div class="min-h-screen mx-auto max-w-screen-xl">
         <Header />
-        <Component />
+        <main class="px-5">
+          <Component />
+        </main>
         <Footer />
       </div>
     </>

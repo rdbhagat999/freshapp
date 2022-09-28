@@ -45,19 +45,19 @@ export default function GithubPage({ data, url }: PageProps<IProduct | null>) {
         description={data.description}
         image={data.thumbnail}
       />
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-5">
+      <article class="grid sm:grid-cols-1 md:grid-cols-2 gap-5">
         <img
           src={`${data?.thumbnail}`}
           alt={data?.name}
           class="w-full"
         />
-        <div>
-          <div class="text-5xl font-bold mt-3">{data?.name}</div>
-          <div class="text-3xl font-italic mt-5">
+        <section>
+          <h1 class="text-5xl font-bold">{data?.name}</h1>
+          <p class="text-3xl font-italic mt-5">
             {data?.description}
-          </div>
+          </p>
 
-          <div class="grid grid-cols-2 mt-5 text-3xl">
+          <ul class="grid grid-cols-2 mt-5 mb-5 text-3xl">
             {[
               "price",
               "quantity",
@@ -66,14 +66,18 @@ export default function GithubPage({ data, url }: PageProps<IProduct | null>) {
               "type",
               "vendor",
             ].map((stat) => (
-              <div key={stat} class="mt-3">
-                <div class="font-bold">{stat}</div>
-                <div>{data[stat as keyof IProduct]}</div>
-              </div>
+              <li key={stat} class="mt-3">
+                <p class="font-bold">{stat}</p>
+                <p>
+                  {stat == "price"
+                    ? "$" + data[stat as keyof IProduct]
+                    : data[stat as keyof IProduct]}
+                </p>
+              </li>
             ))}
-          </div>
-        </div>
-      </div>
+          </ul>
+        </section>
+      </article>
     </>
   );
 }
