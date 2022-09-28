@@ -1,7 +1,9 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { IProduct } from "../utils/types.ts";
 import { API_ROOT, DB, TOKEN } from "../utils/env.ts";
+import HeadElement from "../components/HeadElement.tsx";
 import ProductCard from "../components/Product.tsx";
+import site from "../utils/site.ts";
 
 export const handler: Handlers<{
   products: IProduct[] | null;
@@ -52,7 +54,7 @@ export const handler: Handlers<{
   },
 };
 export default function Home(
-  { data }: PageProps<{
+  { data, url }: PageProps<{
     products: IProduct[];
     query: string;
   }>,
@@ -61,6 +63,12 @@ export default function Home(
 
   return (
     <>
+      <HeadElement
+        url={url}
+        title={site.title}
+        description={site.description}
+        image={site.ogImage}
+      />
       <form class="flex w-full gap-2">
         <input
           type="text"
@@ -80,7 +88,9 @@ export default function Home(
       <div class="grid sm:grid-cols-2 md:grid-cols-3 mt-5 gap-2">
         {products &&
           products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <div key={product.id}>
+              <ProductCard product={product} showImg={false} />
+            </div>
           ))}
       </div>
     </>
